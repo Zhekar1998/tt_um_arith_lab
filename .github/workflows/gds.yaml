@@ -179,7 +179,7 @@ jobs:
 
       - name: Cell usage summary
         shell: bash
-        run: ./tt/tt_tool.py --print-cell-category $TT_ARGS >> "$GITHUB_STEP_SUMMARY"
+        run: ./tt/tt_tool.py --print-cell-category $TT_ARGS >> "$GITHUB_STEP_SUMMARY" || echo "Cell usage summary unavailable for AS-3V3 SCL." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Publish build logs
         if: success() || failure()

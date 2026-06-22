@@ -93,6 +93,10 @@ jobs:
           test -f "$pdk_dir/libs.ref/$scl/lef/${scl}.lef"
           test -f "$pdk_dir/libs.ref/$scl/lib/${scl}__tt_025C_3v30.lib"
 
+          if ! grep -q "TIMING_VIOLATION_CORNERS" "$pdk_dir/libs.tech/openlane/config.tcl"; then
+            printf '%s\n' 'set ::env(TIMING_VIOLATION_CORNERS) "nom_tt_025C_3v30 nom_ss_125C_3v00 nom_ff_n40C_3v60"' >> "$pdk_dir/libs.tech/openlane/config.tcl"
+          fi
+
       - name: Preserve project user config
         shell: bash
         run: cp src/user_config.json /tmp/tt_project_user_config.json
@@ -118,7 +122,12 @@ jobs:
         if: success() || failure()
         shell: bash
         run: |
+          shopt -s nullglob
           LINTER_LOG=(runs/wokwi/*-verilator-lint/verilator-lint.log)
+          if [ "${#LINTER_LOG[@]}" -eq 0 ]; then
+            echo "No Verilator lint log found."
+            exit 0
+          fi
           LINTER_LOG=${LINTER_LOG[0]}
 
           echo "DEBUG LINTER_LOG *$LINTER_LOG*"

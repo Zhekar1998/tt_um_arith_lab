@@ -25,9 +25,10 @@ module tt_um_detronyx_arith_lab (
   reg [7:0] bank_b_q [0:3];
   reg [1:0] bank_sel_q;
   reg [1:0] mode_q;
-  reg [7:0] cfg_q;
+  reg       signed_overflow_mode_q;
 
   wire [2:0] cmd = uio_in[2:0];
+  wire       _unused_uio_in = &{1'b0, uio_in[7:3]};
   wire       write_a = cmd == 3'd1;
   wire       write_b = cmd == 3'd2;
   wire       load_mode = cmd == 3'd3;
@@ -47,7 +48,7 @@ module tt_um_detronyx_arith_lab (
       end
       bank_sel_q <= 2'd0;
       mode_q     <= MODE_ADD;
-      cfg_q      <= 8'h00;
+      signed_overflow_mode_q <= 1'b0;
     end else if (ena) begin
       if (write_a) begin
         bank_a_q[bank_sel_q] <= ui_in;
@@ -62,16 +63,13 @@ module tt_um_detronyx_arith_lab (
         bank_sel_q <= ui_in[1:0];
       end
       if (load_cfg) begin
-        cfg_q <= ui_in;
+        signed_overflow_mode_q <= ui_in[0];
       end
     end
   end
 
   wire [7:0] add_sum;
   wire       add_cout;
-  wire       add_aux_carry;
-  wire       add_group_p;
-  wire       add_group_g;
   wire       add_overflow;
 
   detronyx_add8_sparse_core u_add_core (
@@ -83,9 +81,9 @@ module tt_um_detronyx_arith_lab (
       .cin_force_val_i (1'b0),
       .sum_o           (add_sum),
       .cout_o          (add_cout),
-      .aux_carry_o     (add_aux_carry),
-      .group_p_o       (add_group_p),
-      .group_g_o       (add_group_g),
+      .aux_carry_o     (),
+      .group_p_o       (),
+      .group_g_o       (),
       .overflow_o      (add_overflow)
   );
 
@@ -97,7 +95,6 @@ module tt_um_detronyx_arith_lab (
       .product_o (mul_product)
   );
 
-  wire [7:0] recip_unused;
   wire [7:0] quotient;
   wire       div_zero;
   wire       div_valid;
@@ -109,7 +106,7 @@ module tt_um_detronyx_arith_lab (
       .dividend_i (a_w),
       .divisor_i  (b_w),
       .quotient_o (quotient),
-      .recip_o    (recip_unused),
+      .recip_o    (),
       .div_zero_o (div_zero),
       .valid_o    (div_valid)
   );
@@ -117,7 +114,7 @@ module tt_um_detronyx_arith_lab (
   reg [7:0] result_r;
   reg       status_r;
 
-  wire add_status_flag = cfg_q[0] ? add_overflow : add_cout;
+  wire add_status_flag = signed_overflow_mode_q ? add_overflow : add_cout;
   wire mul_high_nonzero = |mul_product[15:8];
 
   always @* begin
@@ -125,7 +122,8 @@ module tt_um_detronyx_arith_lab (
       MODE_ADD:    result_r = add_sum;
       MODE_MUL_LO: result_r = mul_product[7:0];
       MODE_DIV:    result_r = quotient;
-      default:     result_r = mul_product[15:8];
+      MODE_MUL_HI: result_r = mul_product[15:8];
+      default:     result_r = 8'h00;
     endcase
 
     case (mode_q)

@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 `default_nettype none
 
 module simd_add8_sparse_v2 (

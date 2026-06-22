@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 `default_nettype none
 
 module detronyx_pdk_maskrom_recip8_256x8 (
@@ -68,6 +67,8 @@ module detronyx_pdk_maskrom_recip8_256x8__program_bank0 (
     input  wire [63:0] row_sel_i,
     output wire [7:0] data_o
 );
+    wire _unused_row_sel = &{1'b0, row_sel_i[0]};
+
     assign data_o[0] =
         row_sel_i[1] | row_sel_i[3] | row_sel_i[5] | row_sel_i[10] | row_sel_i[11] | row_sel_i[12] | row_sel_i[13] | row_sel_i[15] |
         row_sel_i[17] | row_sel_i[19] | row_sel_i[22] | row_sel_i[23] | row_sel_i[26] | row_sel_i[27] | row_sel_i[28] | row_sel_i[33] |

@@ -47,22 +47,23 @@ module detronyx_recip8_div8_core (
   reg       div_zero_q;
   reg       valid_q;
 
-  wire [15:0] recip_lo_w;
-  wire [15:0] qb_w;
+  wire [15:0] recip_product_w;
+  wire [15:0] qb_product_w;
+  wire        _unused_product_bits = &{1'b0, recip_product_w[7:0], qb_product_w[15:8]};
 
   detronyx_umul8_comb u_mul_recip (
       .a_i       (a_s0),
       .b_i       (recip_w),
-      .product_o (recip_lo_w)
+      .product_o (recip_product_w)
   );
 
   detronyx_umul8_comb u_mul_qb (
       .a_i       (q_est_s1),
       .b_i       (b_s1),
-      .product_o (qb_w)
+      .product_o (qb_product_w)
   );
 
-  wire [8:0] rem_s1 = {1'b0, a_s1} - {1'b0, qb_w[7:0]};
+  wire [8:0] rem_s1 = {1'b0, a_s1} - {1'b0, qb_product_w[7:0]};
   wire [7:0] q_fix_s1 = (rem_s1 >= {1'b0, b_s1}) ? (q_est_s1 + 8'd1) : q_est_s1;
 
   always @(posedge clk_i or negedge rst_ni) begin
@@ -102,7 +103,7 @@ module detronyx_recip8_div8_core (
       short_s1 <= short_s0;
       short_q_s1 <= short_q_s0;
       recip_s1 <= recip_w;
-      q_est_s1 <= recip_lo_w[15:8];
+      q_est_s1 <= recip_product_w[15:8];
 
       valid_q <= valid_s1;
       quotient_q <= short_s1 ? short_q_s1 : q_fix_s1;

@@ -225,11 +225,23 @@ jobs:
   gl_test:
     needs: gds
     runs-on: ubuntu-24.04
+    env:
+      AS_SCL_VERILOG: ${{ github.workspace }}/avalon_scl/pdk/libs.ref/gf180mcu_as_sc_mcu7t3v3/verilog/gf180mcu_as_sc_mcu7t3v3.v
     steps:
       - name: checkout repo
         uses: actions/checkout@v6
         with:
           submodules: recursive
+
+      - name: Checkout Avalon AS-3V3 SCL
+        uses: actions/checkout@v6
+        with:
+          repository: AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3
+          path: avalon_scl
+
+      - name: Check AS GL model
+        shell: bash
+        run: test -f "$AS_SCL_VERILOG"
 
       - name: GL test
         uses: TinyTapeout/tt-gds-action/gl_test@ttgf26a

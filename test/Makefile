@@ -9,7 +9,7 @@ SRC_DIR = $(PWD)/../src
 PDK ?= gf180mcuD
 PDK_SIM_ROOT ?= $(abspath $(PWD)/../../../pdk_shim)
 AS_SCL_VERILOG ?= $(PDK_SIM_ROOT)/$(PDK)/libs.ref/gf180mcu_as_sc_mcu7t3v3/verilog/gf180mcu_as_sc_mcu7t3v3.v
-GATE_NETLIST ?= $(PWD)/../runs/wokwi/final/pnl/tt_um_detronyx_arith_lab.pnl.v
+GATE_NETLIST ?= $(PWD)/gate_level_netlist.v
 PROJECT_SOURCES = detronyx_pdk_maskrom_recip8_256x8.behav.sv detronyx_umul8_comb.sv simd_add8_sparse_v2.v detronyx_add8_sparse_core.sv detronyx_recip8_div8_core.sv project.v
 COMPILE_ARGS += -g2012
 

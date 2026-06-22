@@ -1,0 +1,54 @@
+{
+  "DESIGN_NAME": "tt_um_detronyx_arith_lab",
+  "VERILOG_FILES": [
+    "dir::detronyx_pdk_maskrom_recip8_256x8.behav.sv",
+    "dir::detronyx_umul8_comb.sv",
+    "dir::simd_add8_sparse_v2.v",
+    "dir::detronyx_add8_sparse_core.sv",
+    "dir::detronyx_recip8_div8_core.sv",
+    "dir::project.v"
+  ],
+  "DIE_AREA": "0 0 346.64 160.72",
+  "FP_DEF_TEMPLATE": "dir::../tt/tech/gf180mcuD/def/tt_block_1x1_pgvdd.def",
+  "VDD_PIN": "VPWR",
+  "GND_PIN": "VGND",
+  "RT_MAX_LAYER": "Metal4",
+  "VDD_PIN_VOLTAGE": 3.3,
+  "LIB_SYNTH": "pdk_dir::libs.ref/gf180mcu_as_sc_mcu7t3v3/lib/gf180mcu_as_sc_mcu7t3v3__tt_025C_3v30.lib",
+  "LIB_FASTEST": "pdk_dir::libs.ref/gf180mcu_as_sc_mcu7t3v3/lib/gf180mcu_as_sc_mcu7t3v3__ff_n40C_3v60.lib",
+  "LIB_SLOWEST": "pdk_dir::libs.ref/gf180mcu_as_sc_mcu7t3v3/lib/gf180mcu_as_sc_mcu7t3v3__ss_125C_3v00.lib",
+  "DEFAULT_CORNER": "nom_tt_025C_3v30",
+  "STA_CORNERS": [
+    "nom_tt_025C_3v30",
+    "nom_ss_125C_3v00",
+    "nom_ff_n40C_3v60",
+    "min_tt_025C_3v30",
+    "min_ss_125C_3v00",
+    "min_ff_n40C_3v60",
+    "max_tt_025C_3v30",
+    "max_ss_125C_3v00",
+    "max_ff_n40C_3v60"
+  ],
+  "LIB": {
+    "*_tt_025C_3v30": [
+      "pdk_dir::libs.ref/gf180mcu_as_sc_mcu7t3v3/lib/gf180mcu_as_sc_mcu7t3v3__tt_025C_3v30.lib"
+    ],
+    "*_ss_125C_3v00": [
+      "pdk_dir::libs.ref/gf180mcu_as_sc_mcu7t3v3/lib/gf180mcu_as_sc_mcu7t3v3__ss_125C_3v00.lib"
+    ],
+    "*_ff_n40C_3v60": [
+      "pdk_dir::libs.ref/gf180mcu_as_sc_mcu7t3v3/lib/gf180mcu_as_sc_mcu7t3v3__ff_n40C_3v60.lib"
+    ]
+  },
+  "STD_CELL_LIBRARY": "gf180mcu_as_sc_mcu7t3v3",
+  "PNR_SDC_FILE": "dir::constraints.sdc",
+  "SIGNOFF_SDC_FILE": "dir::constraints.sdc",
+  "MAX_FANOUT_CONSTRAINT": 16,
+  "MAX_CAPACITANCE_CONSTRAINT": 0.65,
+  "DESIGN_REPAIR_MAX_SLEW_PCT": 30,
+  "GRT_DESIGN_REPAIR_MAX_SLEW_PCT": 25,
+  "CTS_MAX_CAP": 0.65,
+  "CTS_SINK_CLUSTERING_SIZE": 24,
+  "CTS_SINK_CLUSTERING_MAX_DIAMETER": 200,
+  "CTS_SINK_BUFFER_MAX_CAP_DERATE_PCT": 100
+}
